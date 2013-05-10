@@ -2,7 +2,7 @@ require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class Doorkeeper < OmniAuth::Strategies::OAuth2
+    class Adstage < OmniAuth::Strategies::OAuth2
       # change the class name and the :name option to match your application name
       option :name, :adstage
 
@@ -15,7 +15,8 @@ module OmniAuth
 
       info do
         {
-          :email => raw_info["email"]
+          :email => raw_info["email"],
+          :admin => raw_info["admin"]
           # and anything else you want to return to your API consumers
         }
       end

@@ -11,18 +11,26 @@ module OmniAuth
         :authorize_url => "/oauth/authorize"
       }
 
-      uid { raw_info["id"] }
+      uid { user_info['id'] }
 
       info do
-        {
-          :email => raw_info["email"],
-          :admin => raw_info["admin"]
-          # and anything else you want to return to your API consumers
-        }
+        info_hash = properties(user_info)
+        info_hash[:organizations] = organizations_info
+        info_hash
       end
 
-      def raw_info
-        @raw_info ||= access_token.get('/api/me').parsed
+      private
+
+      def user_info
+        @user_info ||= access_token.get('/api/me').parsed
+      end
+
+      def organizations_info
+        user_info['_embedded']['adstage:organizations'].map { |org| properties(org) }
+      end
+
+      def properties(entity)
+        entity.except('_embedded', '_forms', '_links')
       end
     end
   end

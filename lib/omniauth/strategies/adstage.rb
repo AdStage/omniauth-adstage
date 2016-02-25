@@ -14,7 +14,7 @@ module OmniAuth
       uid { user_info['id'] }
 
       info do
-        info_hash = properties(user_info)
+        info_hash = user_info
         info_hash[:organizations] = organizations_info
         info_hash
       end
@@ -26,11 +26,7 @@ module OmniAuth
       end
 
       def organizations_info
-        user_info['_embedded']['adstage:organizations'].map { |org| properties(org) }
-      end
-
-      def properties(entity)
-        entity.except('_embedded', '_forms', '_links')
+        user_info['_embedded']['adstage:organizations']
       end
     end
   end
